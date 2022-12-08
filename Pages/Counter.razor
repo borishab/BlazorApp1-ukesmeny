@@ -1,0 +1,178 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<!-- <p>Current count: @currentCount</p> -->
+<p>Current count:</p>
+<p></p>
+
+<!-- <button class="btn btn-primary" @onclick="IncrementCount">Click me</button> -->
+<button class="btn btn-primary" @onclick="GetDish">Generer ukesmeny</button>
+
+
+
+@code {
+
+    public class DishClass
+    {
+
+        public string Type { get; set; }
+        public string Dish { get; set; }
+
+
+        public void setVal(string val1, string val2)
+        {
+            Type = val1;
+            Dish = val2;
+        }
+
+        public string GetDishType()
+        {
+            return Type;
+        }
+
+        public string GetDishName()
+        {
+            return Dish;
+        }
+
+
+        public List<DishClass> AllDishes()
+        {
+            List<DishClass> alle_retter = new List<DishClass>();
+
+            DishClass kjottkaker = new DishClass();
+            kjottkaker.setVal("Kjøtt", "Kjøttkaker");
+            alle_retter.Add(kjottkaker);
+
+ 
+
+            DishClass fiskekaker = new DishClass();
+            fiskekaker.setVal("Fisk", "Fiskekaker");
+            alle_retter.Add(fiskekaker);
+
+ 
+
+            DishClass fiskepinner = new DishClass();
+            fiskepinner.setVal("Fisk", "Fiskepinner");
+            alle_retter.Add(fiskepinner);
+
+ 
+
+            DishClass orret = new DishClass();
+            orret.setVal("Fisk", "Ørret");
+            alle_retter.Add(orret);
+
+ 
+
+            DishClass torsk = new DishClass();
+            torsk.setVal("Fisk", "Torsk");
+            alle_retter.Add(torsk);
+
+ 
+
+            DishClass fiskegrateng = new DishClass();
+            fiskegrateng.setVal("Fisk", "Fiskegrateng");
+            alle_retter.Add(fiskegrateng);
+
+ 
+
+            DishClass taco = new DishClass();
+            taco.setVal("Kjøtt", "Taco");
+            alle_retter.Add(taco);
+
+ 
+
+            DishClass lasagne = new DishClass();
+            lasagne.setVal("Kjøtt", "Lasagne");
+            alle_retter.Add(lasagne);
+
+ 
+
+            DishClass kjottpudding = new DishClass();
+            kjottpudding.setVal("Kjøtt", "Kjøttpudding");
+            alle_retter.Add(kjottpudding);
+
+ 
+
+            DishClass kjottboller = new DishClass();
+            kjottboller.setVal("Kjøtt", "Kjøttboller");
+            alle_retter.Add(kjottboller);
+
+ 
+
+            DishClass kyllingfilet = new DishClass();
+            kyllingfilet.setVal("Fugl", "Kyllingfilet");
+            alle_retter.Add(kyllingfilet);
+
+ 
+
+            DishClass kyllingvinger = new DishClass();
+            kyllingvinger.setVal("Fugl", "Kyllingvinger");
+            alle_retter.Add(kyllingvinger);
+
+ 
+
+            DishClass andebryst = new DishClass();
+            andebryst.setVal("Fugl", "Andebryst");
+            alle_retter.Add(andebryst);
+
+ 
+
+            DishClass fiskesuppe = new DishClass();
+            fiskesuppe.setVal("Fisk", "Fiskesuppe");
+            alle_retter.Add(fiskesuppe);
+
+ 
+
+            DishClass pizza = new DishClass();
+            pizza.setVal("Kjøtt", "Pizza");
+            alle_retter.Add(pizza);
+
+ 
+
+            DishClass polse = new DishClass();
+            polse.setVal("Kjøtt", "Pølse");
+            alle_retter.Add(polse);
+
+ 
+
+            DishClass tikkaMasala = new DishClass();
+            tikkaMasala.setVal("Fugl", "Tikka Masala");
+            alle_retter.Add(tikkaMasala);
+
+ 
+
+            DishClass karbonade = new DishClass();
+            karbonade.setVal("Kjøtt", "Karbonade");
+            alle_retter.Add(karbonade);
+
+            return alle_retter;
+        }
+
+    }
+
+
+
+
+    private async Task GetDish()
+
+    {
+        await Task.Delay(100);
+
+        //var tst = new DishClass();
+        string[] fishes = { "Ørret", "Saran", "Stuka", "Pastrmka" };
+        var tilfeldig = new Random();
+        var rndMember = fishes[tilfeldig.Next(fishes.Length)];
+
+        // fisk = rndMember;
+        //      tst.Dish = "Fiskesuppe";
+        //return 2;
+    }
+
+
+
+
+
+
+}
