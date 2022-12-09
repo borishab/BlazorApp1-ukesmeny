@@ -1,15 +1,154 @@
 ﻿@page "/fetchdata"
-
+@using System.IO;
 @using BlazorApp1_test.Data
 
 @inject DishService  DishService
 <h1>MENY</h1>
+<div class="form-group col-md-2">
+    <label>Impuestos</label>
+    <div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" @onchange="@(() => UpdatePercentage(0))">
+            <label class="form-check-label" for="inlineRadio1">0%</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" @onchange="@(() => UpdatePercentage(16))">
+            <label class="form-check-label" for="inlineRadio2">16%</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" @onchange="@(() => Perzonalized())">
+            <label class="form-check-label" for="inlineRadio3">Perzonalizado</label>
+        </div>
+    </div>
+</div>
 
-<button class="btn btn-primary" @onclick="OnInitializedAsync">Generer ukesmeny</button>
+@page "/dropdownMealtype"
+
+
+
+<p>Velg din foretrukkende type middag fra listen</p>
+
+
+
+<select class="form-control" @bind="@SelectedMealtypeID">
+    @foreach (var Mealtype in MealtypeList)
+    {
+        <option value="@Mealtype">@Mealtype</option>
+    }
+</select>
+<br />
+
+
+@code {
+
+
+
+    string selectedMealtypeID;
+
+
+
+    string SelectedMealtypeID
+    {
+        get => selectedMealtypeID;
+        set { selectedMealtypeID = value; }
+    }
+
+    public class Mealtype
+    {
+
+
+
+        public Mealtype(string type)
+        {
+            Type = type;
+
+        }
+        public string Type { get; set; }
+
+
+
+
+    }
+
+    public static string[] RemoveDuplicates(string[] myList) {
+        System.Collections.ArrayList newList = new System.Collections.ArrayList();
+
+        foreach (string str in myList)
+            if (!newList.Contains(str))
+                newList.Add(str);
+        return (string[])newList.ToArray(typeof(string));
+    }
+
+
+    public static string[] ShowMealTypes()
+    {
+        List<String> alle_types = new List<String>();
+        var allLinesOfTypes = File.ReadAllLines("AllMeals.txt");
+
+        //var index = 0;
+
+        foreach (var line in allLinesOfTypes)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            var categories = line.Split(";");
+            var type = categories[0];
+
+            string mealTypes = type;
+
+            alle_types.Add(mealTypes);
+        }
+
+         var alle_types_array = alle_types.ToArray();
+
+        string [] alle_typesDistinct = RemoveDuplicates(alle_types_array);
+
+
+
+         foreach (var line in alle_typesDistinct)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            var categories = line.Split(";");
+            var type = categories[0];
+
+            string mealTypes = type;
+
+            alle_types.Add(mealTypes);
+        }
+
+
+        return alle_typesDistinct;
+    }
+
+
+    string[] MealtypeList = ShowMealTypes();
+
+    
+}
+
+@if (Perzonalizado)
+{
+    <div class="form-group col-md-2">
+        <label>Tasa</label>
+        <div>
+            <input type="number" class="form-control" @bind-value="@ImpuestoDetalleM.Tasa" />
+        </div>
+    </div>
+}
+
+
+<button class="btn btn-primary" @onclick="TstBoba">Generer ukesmeny</button>
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em></em></p>
 }
 else
 {
@@ -39,9 +178,33 @@ else
 @code {
     private WeatherForecast[] forecasts;
 
-    protected override async Task OnInitializedAsync()
+    protected async Task TstBoba()
     {
         // forecasts = await DishService.GetDishAsync(DateTime.Now);
         forecasts = await DishService.GetDishAsync(DateTime.Now);
     }
+
+
+
+    public ImpuestoDetalle ImpuestoDetalleM = new ImpuestoDetalle();
+
+    private Boolean Perzonalizado = false;
+
+    public class ImpuestoDetalle
+    {
+        public int Tasa { get; set; }
+    }
+
+    public void Perzonalized()
+    {
+        Perzonalizado = true;
+    }
+
+    public void UpdatePercentage(int percentage)
+    {
+        Perzonalizado = false;
+        ImpuestoDetalleM.Tasa = percentage;
+    }
+
+
 }
