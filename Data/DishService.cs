@@ -1,51 +1,38 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static BlazorApp1_test.Pages.Counter;
 
 namespace BlazorApp1_test.Data
 {
-
-    /*
-    public class WeatherForecastService
-    {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
-        {
-            var rng = new Random();
-            return Task.FromResult(Enumerable.Range(1, 10).Select(index => new WeatherForecast
-            {
-                Date = startDate.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            }).ToArray());
-        }
-    }
-
-    */
-
-
     public class DishService
     {
-       
-        public Task<WeatherForecast[]> GetDishAsync(DateTime startDate)
+        public Task<Dish[]> GetDishesAsync(DateTime startDate)
         {
-            DishClass meals = new DishClass();
-            var all_meals = meals.AllDishes();
+            var dishEntities = DishFileRepository.AllDishes();
+            var random = new Random();
+            var plannedDishes = new List<DishEntity>();
+            var result = new List<Dish>();
 
-            Console.Write(all_meals);
-
-            var rng = new Random();
-            return Task.FromResult(Enumerable.Range(1, 7).Select(index => new WeatherForecast
+            for (var i = 1; i <= 7; i++)
             {
-                Date = startDate.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = all_meals[rng.Next(all_meals.Count)].GetDishName()
-            }).ToArray()) ;
+                var dishEntity = dishEntities[random.Next(dishEntities.Count)];
+                    
+                while (plannedDishes.Contains(dishEntity) || (i > 1 && plannedDishes[i - 2].Type == dishEntity.Type))
+                {
+                    dishEntity = dishEntities[random.Next(dishEntities.Count)];
+                }
+
+                plannedDishes.Add(dishEntity);
+                result.Add(ToDish(startDate.AddDays(i), dishEntity));
+            }
+
+            return Task.FromResult(result.ToArray());
+        }
+
+        public Dish ToDish(DateTime date, DishEntity dishEntity)
+        {
+            return new Dish(date, dishEntity.Dish);
         }
     }
 }

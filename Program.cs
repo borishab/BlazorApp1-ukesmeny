@@ -15,6 +15,10 @@ namespace BlazorApp1_test
     {
         public static void Main(string[] args)
         {
+            System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("nb-NO");
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+
             CreateHostBuilder(args).Build().Run();
         }
 
